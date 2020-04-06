@@ -16,3 +16,28 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
   if (err) throw err;
 });
+
+// Prompt user with various options
+options = ["View All Employees"];
+inquirer
+  .prompt({
+    type: "list",
+    message: "What would you like to do?",
+    name: "employees",
+    choices: options,
+  })
+  .then((response) => {
+    switch (response.employees) {
+      case options[0]:
+        line1 =
+          "select employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary\n";
+        line2 =
+          "from ((employee inner join role on employee.role_id = role.id) inner join department on role.department_id = department.id);";
+        connection.query(line1 + line2, function (err, data) {
+          console.log("\n");
+          console.table(data);
+        });
+        break;
+    }
+    connection.end();
+  });
