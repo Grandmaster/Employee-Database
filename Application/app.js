@@ -30,7 +30,7 @@ inquirer
     switch (response.employees) {
       case options[0]:
         line1 =
-          "select employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary\n";
+          "select employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id\n";
         line2 =
           "from ((employee inner join role on employee.role_id = role.id) inner join department on role.department_id = department.id);";
         connection.query(line1 + line2, function (err, data) {
@@ -41,8 +41,23 @@ inquirer
             delete instance.name;
             instance.department = department;
           }
+          // Renaming the manager column
+          for (let instance of data) {
+            var manager_id = instance.manager_id;
+            if (manager_id !== null) {
+              var manager = data.filter((a) => {
+                return a.id == manager_id;
+              });
+              delete instance.manager_id;
+              instance.manager =
+                manager[0].first_name + " " + manager[0].last_name;
+            } else {
+              var manager_id = instance.manager_id;
+              delete instance.manager_id;
+              instance.manager = manager_id;
+            }
+          }
           console.table(data);
-          console.log(data);
         });
         break;
     }
