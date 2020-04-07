@@ -18,7 +18,7 @@ connection.connect((err) => {
 });
 
 // Prompt user with various options
-options = ["View All Employees"];
+options = ["View All Employees", "Add Employee"];
 inquirer
   .prompt({
     type: "list",
@@ -35,7 +35,14 @@ inquirer
           "from ((employee inner join role on employee.role_id = role.id) inner join department on role.department_id = department.id);";
         connection.query(line1 + line2, function (err, data) {
           console.log("\n");
+          // Renaming the department column
+          for (let instance of data) {
+            var department = instance.name;
+            delete instance.name;
+            instance.department = department;
+          }
           console.table(data);
+          console.log(data);
         });
         break;
     }
