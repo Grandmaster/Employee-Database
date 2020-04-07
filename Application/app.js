@@ -60,6 +60,30 @@ inquirer
           console.table(data);
         });
         break;
+      case options[1]:
+        inquirer.prompt([
+          {
+            type: "input",
+            message: "What is your employee's first name?",
+            name: "first_name",
+          },
+          {
+            type: "input",
+            message: "What is your employee's last name?",
+            name: "last_name",
+          },
+          {
+            type: "input",
+            message: "What is your employee's role?",
+            name: "role",
+          },
+          {
+            type: "input",
+            message: "Who is your employee's manager?",
+            name: "manager",
+          },
+        ]);
+        break;
     }
     connection.end();
   });
