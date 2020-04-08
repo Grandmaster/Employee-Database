@@ -2,8 +2,9 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const table = require("console.table");
+const Database = require("./database.js");
 
-// Create connection
+// Create connection, and create object to store functions related to the database
 const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -11,6 +12,7 @@ const connection = mysql.createConnection({
   password: "Chidi17",
   database: "employees_db",
 });
+const database = new Database(connection);
 
 // Initialize connection
 connection.connect((err) => {
@@ -61,6 +63,9 @@ inquirer
         });
         break;
       case options[1]:
+        var list = [];
+        database.getEmployeeList(list);
+        console.log(list);
         inquirer.prompt([
           {
             type: "input",
